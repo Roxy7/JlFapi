@@ -40,6 +40,14 @@ class News
      * @Assert\NotBlank
      */
     private $content='';
+
+    /**
+     * @var array an array of string for a list
+     * 
+     * @ORM\Column(type="json_array")
+     */
+    private $list;
+    
     
     public function getId(): int
     {
@@ -65,4 +73,17 @@ class News
     {
         $this->content=$content;
     }
+
+    public function setList($list)
+    {
+        $this->list = json_encode($list);
+
+        return $this;
+    }
+
+    public function getList($list) 
+    {
+        return json_decode($this->list);
+    }
+
 }
