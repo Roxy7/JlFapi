@@ -7,12 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\NewsRepository")
- */
-/**
- *
- * @ApiResource
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\NewsRepository")
+ * @ORM\HasLifecycleCallbacks()
+ * @ApiResource
+ * 
  */
 class News
 {
@@ -47,6 +46,20 @@ class News
      * @ORM\Column(type="json_array")
      */
     private $list;
+
+    /**
+     * @var \DateTime the date when the object was created
+     * 
+     * @ORM\Column(type="datetime", nullable=False)
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime the date when the object was updated/created
+     * 
+     * @ORM\Column(type="datetime", nullable=True)
+     */
+    private $updatedAt;
     
     
     public function getId(): int
@@ -84,6 +97,68 @@ class News
     public function getList($list) 
     {
         return json_decode($this->list);
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return News
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return News
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+    *
+    * @ORM\PrePersist
+    * @ORM\PreUpdate
+    */
+    public function updatedTimestamps()
+    {
+        $this->setUpdatedAt(new \DateTime('now'));
+
+        if ($this->getCreatedAt() == null) {
+            $this->setCreatedAt(new \DateTime('now'));
+        }
     }
 
 }
