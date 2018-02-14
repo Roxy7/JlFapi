@@ -10,7 +10,17 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="App\Repository\NewsRepository")
  * @ORM\HasLifecycleCallbacks()
- * @ApiResource
+ * @ApiResource(
+ *     collectionOperations={
+ *     "get"={"method"="GET"},
+ *      "post"={"method"="POST","access_control"="is_granted('ROLE_ADMIN')"}
+ *     },
+ *     itemOperations={
+ *      "get"={"method"="GET"},
+ *     "put"={"method"="PUT","access_control"="is_granted('ROLE_ADMIN')"},
+ *     "delete"={"method"="DELETE","access_control"="is_granted('ROLE_ADMIN')"}
+ *     }
+ *     )
  * 
  */
 class News

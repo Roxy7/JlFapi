@@ -16,7 +16,8 @@ class DefaultController extends Controller
      */
     public function admin()
     {
-        return new Response('<html><body>Admin page!</body></html>');
+        //return new Response('<html><body>Admin page!</body></html>');
+        return $this->render('admin.html.twig');
     }
 
     /**
@@ -24,6 +25,11 @@ class DefaultController extends Controller
      */
     public function index()
     {
-        return new Response('<html><body>Index page!</body></html>');
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository('App:User')->findAll();
+        //return $this->json($users);
+        //return new Response('<html><body>Index page!</body></html>');
+
+        return $this->render('index.html.twig', array('users' => $users));
     }
 }

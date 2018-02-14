@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>All users</h1>
+
+    {% for user in users %}
+
+        {{ user.username }}
+
+    {% endfor %}
+
+    <a href="{{ path('app_default_admin') }}">vers l'admin</a>
+    <a href="{{ path('api_doc') }}">vers la doc</a>
+
+{% endblock %}

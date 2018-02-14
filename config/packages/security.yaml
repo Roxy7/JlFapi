@@ -1,19 +1,14 @@
 security:
+    encoders:
+        App\Entity\User:
+            #algorithm: plaintext
+            algorithm: bcrypt
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory:
-            memory:
-                users:
-                    roxanne7_:
-                        password: $2y$12$fpkBxYGEhg6X6kMBI9Q3Cue1pfaWfKnxQH1Xj5uzCxp1OdggJBxS.
-                        roles: 'ROLE_USER'
-                    admin:
-                        password: $2y$12$xPHu6YZd2eQBlEk.naoAEum9gYs1jheeyh/o5xiv7fobr1EGahZXm
-                        roles: 'ROLE_ADMIN'
-    encoders:
-        Symfony\Component\Security\Core\User\User:
-            algorithm: bcrypt
-            cost: 12
+        doctrine_provider:
+            entity:
+                class: App\Entity\User
+                property: username
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -21,6 +16,7 @@ security:
         main:
             anonymous: ~
             http_basic: ~
+            provider: doctrine_provider
             logout:
                 path:   /logout
                 target: /
@@ -35,3 +31,4 @@ security:
     access_control:
             #require ROLE_ADMIN for /admin*
             - { path: ^/admin, role: ROLE_ADMIN }
+            - { path: ^/api/docs, role: ROLE_ADMIN }
