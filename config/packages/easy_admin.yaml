@@ -1,0 +1,15 @@
+easy_admin:
+
+    entities:
+        # List the entity class name you want to manage
+        News:
+          class: App\Entity\News
+          list:
+              fields: ['id','title',{ property: 'image', type: 'image', base_path: '%app.path.news_images%' }]
+          form:
+              fields: ['title','content',{ property: 'list', type: 'collection' },{ property: 'imageFile', type: 'vich_image' }]
+
+        User:
+          class: App\Entity\User
+
+

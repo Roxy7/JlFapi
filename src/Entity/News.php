@@ -5,11 +5,15 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 /**
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="App\Repository\NewsRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @Vich\Uploadable
  * @ApiResource(
  *     collectionOperations={
  *     "get"={"method"="GET"},
@@ -58,6 +62,18 @@ class News
     private $list;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     * @var string
+     */
+    private $image;
+
+    /**
+     * @Vich\UploadableField(mapping="news_images", fileNameProperty="image")
+     * @var File
+     */
+    private $imageFile;
+
+    /**
      * @var \DateTime the date when the object was created
      * 
      * @ORM\Column(type="datetime", nullable=False)
@@ -104,10 +120,39 @@ class News
         return $this;
     }
 
-    public function getList($list) 
+    public function getList()
     {
         return json_decode($this->list);
     }
+
+    public function setImageFile(File $image = null)
+    {
+        $this->imageFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
 
     /**
      * Set createdAt
